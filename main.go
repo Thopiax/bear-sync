@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"os/exec"
 	"path"
 	"path/filepath"
 	"strings"
@@ -57,6 +58,12 @@ func main() {
 	logger.Printf("Creating symlink from %s to %s...", cloudBearConfig, localBearConfig)
 	// Create symlink from cloudBearConfig to localBearConfig
 	err = os.Symlink(cloudBearConfig, localBearConfig)
+	check(logger, err)
+
+	// Change permissions
+	logger.Println("Setting permissions...")
+	cmd := exec.Command("chmod", "+rw", cloudBearConfig)
+	err = cmd.Run()
 	check(logger, err)
 
 	logger.Println("Succesfully finished.")
